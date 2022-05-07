@@ -1,0 +1,16 @@
+{
+    "description": "This NFT proves I've created and deployed my first ERC721 smart contract on Rinkeby with Alchemy Road to Web3",
+    "external_url": "Alchemy.com",
+    "image": "https://ipfs.filebase.io/ipfs/bafkreia27uzol5qfhjiimdlhyxl4yo6gzknborrubf76mweaki5aue5fli",
+    "name": "RoadToWeb3 first NFT",
+    "attributes": [
+        {
+            "trait_type": "Species",
+            "value": "Pokemon"
+        },
+        {
+            "trait_type": "Coolness",
+            "value": "Very Cool"
+        }
+    ]
+}
