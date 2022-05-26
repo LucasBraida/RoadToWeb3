@@ -7,12 +7,18 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
-contract ChainBattes is ERC721URIStorage {
+contract ChainBattles is ERC721URIStorage {
     using Strings for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
-
+    struct CharacterStats {
+        uint256 level;
+        uint256 speed;
+        uint256 strength;
+        uint256 life;
+    }
     mapping(uint256 => uint256) public tokenIdToLevels;
+    mapping(uint256 => CharacterStats) public tokenIdToStats;
 
     constructor() ERC721("Chain Battles", "CBTLS") {}
 
@@ -39,12 +45,33 @@ contract ChainBattes is ERC721URIStorage {
             );
     }
 
+    function getRandomNumber(uint256 number) internal returns (uint256) {
+        return
+            uint256(
+                keccak256(
+                    abi.encodePacked(
+                        block.timestamp,
+                        block.difficulty,
+                        msg.sender
+                    )
+                )
+            ) % number;
+    }
+
     function getLevels(uint256 tokenId) public view returns (string memory) {
         uint256 levels = tokenIdToLevels[tokenId];
         return levels.toString();
     }
 
-    function getTokenURI(uint256 tokenId) public view returns (string memory) {
+    function getCharacterStats(uint256 tokenId) public view returns (CharacterStats memory){
+        return tokenIdToStats[tokenId];
+    }
+
+    function getInitialStats() internal returns (CharacterStats memory){
+        return CharacterStats(0,getRandomNumber(300),getRandomNumber(100),getRandomNumber(600));
+    }
+
+    function getTokenURI(uint256 tokenId) public  returns (string memory) {
         bytes memory dataURI = abi.encodePacked(
             "{",
             '"name": "Chain Battles #',
@@ -70,6 +97,7 @@ contract ChainBattes is ERC721URIStorage {
         uint256 newItemId = _tokenIds.current();
         _safeMint(msg.sender, newItemId);
         tokenIdToLevels[newItemId] = 0;
+        tokenIdToStats[newItemId] = getInitialStats();
         _setTokenURI(newItemId, getTokenURI(newItemId));
     }
 
@@ -81,6 +109,7 @@ contract ChainBattes is ERC721URIStorage {
         );
         uint256 currentLevel = tokenIdToLevels[tokenId];
         tokenIdToLevels[tokenId] = currentLevel + 1;
+        tokenIdToStats[tokenId].level = currentLevel +1;
         _setTokenURI(tokenId, getTokenURI(tokenId));
     }
 }
