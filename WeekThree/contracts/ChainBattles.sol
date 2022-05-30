@@ -22,17 +22,29 @@ contract ChainBattles is ERC721URIStorage {
 
     constructor() ERC721("Chain Battles", "CBTLS") {}
 
-    function generateCharacter(uint256 tokenId) public returns (string memory) {
+    function generateCharacter(uint256 tokenId) public view returns (string memory) {
         bytes memory svg = abi.encodePacked(
             '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350">',
             "<style>.base { fill: white; font-family: serif; font-size: 14px; }</style>",
             '<rect width="100%" height="100%" fill="black" />',
-            '<text x="50%" y="40%" class="base" dominant-baseline="middle" text-anchor="middle">',
+            '<text x="50%" y="30%" class="base" dominant-baseline="middle" text-anchor="middle">',
             "Warrior",
             "</text>",
-            '<text x="50%" y="50%" class="base" dominant-baseline="middle" text-anchor="middle">',
+            '<text x="50%" y="40%" class="base" dominant-baseline="middle" text-anchor="middle">',
             "Levels: ",
             getLevels(tokenId),
+            "</text>",
+            '<text x="50%" y="50%" class="base" dominant-baseline="middle" text-anchor="middle">',
+            "Speed: ",
+            tokenIdToStats[tokenId].speed.toString(),
+            "</text>",
+            '<text x="50%" y="60%" class="base" dominant-baseline="middle" text-anchor="middle">',
+            "Life: ",
+            tokenIdToStats[tokenId].life.toString(),
+            "</text>",
+            '<text x="50%" y="70%" class="base" dominant-baseline="middle" text-anchor="middle">',
+            "Strength: ",
+            tokenIdToStats[tokenId].strength.toString(),
             "</text>",
             "</svg>"
         );
@@ -45,7 +57,7 @@ contract ChainBattles is ERC721URIStorage {
             );
     }
 
-    function getRandomNumber(uint256 number) internal returns (uint256) {
+    function getRandomNumber(uint256 number) internal view returns (uint256) {
         return
             uint256(
                 keccak256(
@@ -63,15 +75,26 @@ contract ChainBattles is ERC721URIStorage {
         return levels.toString();
     }
 
+    // function getLevels(uint256 tokenId) public view returns (string memory) {
+    //     uint256 levels = tokenIdToLevels[tokenId];
+    //     return levels.toString();
+    // }
+
+    // function getStat(uint256 tokenId, string memory stat) internal view returns (string memory){
+    //     CharacterStats memory character = tokenIdToStats[tokenId];
+    //     uint256 statValue = character[stat]; 
+    //     return statValue.toString();
+    // }
+
     function getCharacterStats(uint256 tokenId) public view returns (CharacterStats memory){
         return tokenIdToStats[tokenId];
     }
 
-    function getInitialStats() internal returns (CharacterStats memory){
+    function getInitialStats() internal view returns (CharacterStats memory){
         return CharacterStats(0,getRandomNumber(300),getRandomNumber(100),getRandomNumber(600));
     }
 
-    function getTokenURI(uint256 tokenId) public  returns (string memory) {
+    function getTokenURI(uint256 tokenId) public view returns (string memory) {
         bytes memory dataURI = abi.encodePacked(
             "{",
             '"name": "Chain Battles #',
@@ -110,6 +133,9 @@ contract ChainBattles is ERC721URIStorage {
         uint256 currentLevel = tokenIdToLevels[tokenId];
         tokenIdToLevels[tokenId] = currentLevel + 1;
         tokenIdToStats[tokenId].level = currentLevel +1;
+        tokenIdToStats[tokenId].speed = tokenIdToStats[tokenId].speed + 2 + getRandomNumber(10);
+        tokenIdToStats[tokenId].life = tokenIdToStats[tokenId].life + 4 + getRandomNumber(20);
+        tokenIdToStats[tokenId].strength = tokenIdToStats[tokenId].strength + 1 + getRandomNumber(5);
         _setTokenURI(tokenId, getTokenURI(tokenId));
     }
 }
