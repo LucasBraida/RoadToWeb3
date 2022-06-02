@@ -12,26 +12,40 @@ const main = async () => {
 
       let tx = await nftContract.connect(randomPerson).mint();
       tx.wait();
-      tx = await nftContract.connect(randomPerson).mint();
-      tx.wait();
-      tx = await nftContract.connect(randomPerson2).mint();
-      tx.wait();
-      tx = await nftContract.connect(randomPerson2).mint();
-      tx.wait();
+      let URI = await nftContract.getTokenURI(1);
+      //URI.wait();
+      console.log('First NFT')
+      console.log(URI)
+      console.log('==================')
+      console.log('==================')
+      console.log('==================')
+      tx = await nftContract.connect(randomPerson).train(1);
+      tx.wait()
+      URI = await nftContract.getTokenURI(1);
+      //URI.wait();
+      console.log('After Train')
+      console.log(URI)
+      
+      // tx = await nftContract.connect(randomPerson).mint();
+      // tx.wait();
+      // tx = await nftContract.connect(randomPerson2).mint();
+      // tx.wait();
+      // tx = await nftContract.connect(randomPerson2).mint();
+      // tx.wait();
 
-      let stats = await nftContract.getCharacterStats(0)
+      // let stats = await nftContract.getCharacterStats(0)
 
-      console.log('Random Person 1 token 0 ', stats)
-      stats = await nftContract.getCharacterStats(1)
+      // console.log('Random Person 1 token 0 ', stats)
+      // stats = await nftContract.getCharacterStats(1)
 
-      console.log('Random Person 1 token 1 ', stats)
-      stats = await nftContract.getCharacterStats(2)
+      // console.log('Random Person 1 token 1 ', stats)
+      // stats = await nftContract.getCharacterStats(2)
 
-      console.log('Random Person 1 token 2 ', stats)
-      stats = await nftContract.getCharacterStats(3)
+      // console.log('Random Person 1 token 2 ', stats)
+      // stats = await nftContract.getCharacterStats(3)
 
-      console.log('Random Person 1 token 3 ', stats)
-      process.exit(0);
+      // console.log('Random Person 1 token 3 ', stats)
+      // process.exit(0);
     } catch (error) {
       console.log(error);
       process.exit(1);
