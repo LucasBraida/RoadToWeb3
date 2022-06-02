@@ -12,7 +12,7 @@ export const NFTCard = ({ nft }) => {
                     <p className="text-gray-600">Id: {nft.id.tokenId.substr(nft.id.tokenId.length - 4)}</p>
                     <div className='flex items-center'>
                         <p className="text-gray-600 mr-2" >{`${nft.contract.address.substr(0, 4)}...${nft.contract.address.substr(nft.contract.address.length - 4)}`}</p>
-                        <BiCopy onClick={() =>{navigator.clipboard.writeText(nft.contract.address)}}></BiCopy>
+                        <BiCopy className="cursor-pointer" onClick={() =>{navigator.clipboard.writeText(nft.contract.address)}}></BiCopy>
                     </div>
 
                 </div>
